@@ -1,5 +1,8 @@
 const ERR_MSG = '未入力項目または不正な文字入力があります'
 const LINE = '======================='
+let MESSAGE
+let CONDITION
+let PROBLEM
 
 const ITEM_LIST = [
   'period'                             // 第何期
@@ -35,7 +38,7 @@ const ITEM_HASH = {
     , '合計'
   ]
 }
-
+// console.log(ITEM_HASH['資産の部'][0]);
 const FIRLD_LIST = [
   '科目'
   , '科目'
@@ -99,16 +102,16 @@ const btn_click = () => {
     , form.net_income.value                       // (うち当期純利益)
     , form.total_net_assets_and_liabilities.value // 純資産及び負債の合計()
   ]
-
-  value_list = value_list.map((v, index) => parseInt(v, 10))
-
+  
+  value_list = value_list.map(v => parseInt(v, 10))
+  console.log(value_list.map(v => parseInt(v, 10)));
   let blank_num = 0
   // forEachではbreakできないためこの実装にしている。
   for (let index = 0; index < value_list.length; index++) {
     if (isNaN(value_list[index])) {
       blank_num++
       alert(ERR_MSG)
-      break;
+      break
     } else {
       document.getElementById(ITEM_LIST[index]).innerHTML = value_list[index]
     }
@@ -130,40 +133,62 @@ const btn_click = () => {
     /* 棚卸資産 ＝ 売上高 ÷ 12ヶ月 × １ヶ月 */
     const INVENTORY = parse_int_calc(1)
 
-    console.log(`売上高:${AMOUNT_OF_SALES}`)
-    console.log(`過去の平均的な年間利益:${KEYAVG_ANNUAL_PROFIT_IN_THE_PAST}`)
-    console.log(`流動比率:${CURRENT_RATIO}`)
-    console.log(`現金・預金:${CASH_AND_DEPOSIT}`)
-    console.log(`売掛金:${ACCOUNTS_RECEIVABLE}`)
-    console.log(`棚卸資産:${INVENTORY}`)
-
-    console.log(LINE)
-    console.log('「過去の平均利益」')
+//ここから
     if (KEYAVG_ANNUAL_PROFIT_IN_THE_PAST < value_list.length - 2) {
       console.log('-> 当期は不調気味？')
+      MESSAGE = '-> 当期は不調気味？'
     } else if ((value_list.length - 2 / value_list.length - 1) * 100 < 1){
       console.log('-> 「粉飾決算の可能性」もアタマに入れておくとよいでしょう。')
+      MESSAGE = '-> 「粉飾決算の可能性」もアタマに入れておくとよいでしょう。'
     } else {
       console.log('-> おおむね問題なし')
+      MESSAGE = '-> おおむね問題なし'
     }
-
-    console.log(LINE)
-    console.log('「流動比率」')
     /* 流動比率は200%以上が望ましく、100%未満はマズイ */
     if (CURRENT_RATIO >= 200) {
       console.log('-> Good')
+      CONDITION = '-> Good'
     } else if (CURRENT_RATIO < 100) {
       console.log('-> Bad')
+      CONDITION = '-> Bad'
     } else {
       console.log('-> おおむね問題なし')
+      CONDITION = '-> おおむね問題なし'
     }
-
-    console.log(LINE)
-    console.log('やばい会社かどうか')
     if ((CASH_AND_DEPOSIT + ACCOUNTS_RECEIVABLE + INVENTORY) < value_list[2]) {
       console.log('-> 流動資産のなかに架空資産や不良資産が混じっている可能性あり')
+      PROBLEM = '-> 流動資産のなかに架空資産や不良資産が混じっている可能性あり'
     } else {
       console.log('-> おおむね問題なし')
+      PROBLEM = '-> おおむね問題なし'
     }
+
+    const RESULT_LIST = [
+      `売上高:${AMOUNT_OF_SALES}`
+      , `過去の平均的な年間利益:${KEYAVG_ANNUAL_PROFIT_IN_THE_PAST}`
+      , `流動比率:${CURRENT_RATIO}`
+      , `現金・預金:${CASH_AND_DEPOSIT}`
+      , `売掛金:${ACCOUNTS_RECEIVABLE}`
+      , `棚卸資産:${INVENTORY}`
+      , LINE
+      , '「過去の平均利益」'
+      , MESSAGE
+      , LINE
+      , '「流動比率」'
+      , CONDITION
+      , LINE
+      , 'やばい会社かどうか'
+      , PROBLEM
+    ]
+    //ここまで
+
+    let html = `<div></div>`
+        html += `<ul type="disc">`
+        RESULT_LIST.forEach(element => {
+          html += `<li>${element}</li>`
+        })
+        html += `</ul>`
+        console.log(html);
+        document.getElementById('add').innerHTML = html
   }
 }
