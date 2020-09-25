@@ -93,7 +93,7 @@ const btn_click = () => {
     , form.rieki_yozyoukin.value
     , form.sonohokarieki_yozyoukin.value
     , form.uti_touki_zyunrieki.value
-, form.total_husai_jyunshisan.value
+    , form.total_husai_jyunshisan.value
   ]
 
   value_list = value_list.map((v, index) => parseInt(v, 10))
