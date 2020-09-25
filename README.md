@@ -1,4 +1,4 @@
-# bschecker
+# B/S Checker
 貸借対照表の要旨から経営状況を推測する
 
 https://taigamiura.github.io/bschecker/main
