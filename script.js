@@ -102,7 +102,19 @@ const btn_click = () => {
     , form.net_income.value                       // (うち当期純利益)
     , form.total_net_assets_and_liabilities.value // 純資産及び負債の合計()
   ]
-  
+
+  for(let i = 0 ; i < value_list.length ; i ++){
+          if (value_list[i].match(/[０-９]/)){
+              value_list[i]= check(value_list[i])
+            }
+  }
+
+  function check(elm) {
+    return elm.replace(/[０-９]/g, function(s){
+        return String.fromCharCode(s.charCodeAt(0)-0xFEE0);
+    });
+}
+
   value_list = value_list.map(v => parseInt(v, 10))
   console.log(value_list.map(v => parseInt(v, 10)));
   let blank_num = 0
