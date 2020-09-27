@@ -180,6 +180,7 @@ const replace_char_code = element => {
   })
 }
 
+//初期画面HTMLの類似処理をまとめた関数
 const eache = (KEY,i) => {
   ITEM_HASH[KEY].forEach((element, index) => {
     if (index === 0) {
