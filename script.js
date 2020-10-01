@@ -36,14 +36,16 @@ const ITEM_HASH = {
   ]
 }
 
+const ASSETS_KEY = Object.keys(ITEM_HASH)[0]
+const LIABILITIES＿NETASSETS＿KEY = Object.keys(ITEM_HASH)[1]
+
 const FIRLD_LIST = [
   '科目'
   , '科目'
   , '金額(千円)'
 ]
-//下記の処理は、類似処理を関数[eache()]で作成したためHTML文を入れる変数を用意
-let result
 
+let result
 window.onload = () => {
   result = `<form name="form" action="main.html">`
   result += `<h1 id="${ITEM_LIST[0]}">第<input type="text" size="1" name="${ITEM_LIST[0]}">期決算公告</h1>`
@@ -54,11 +56,11 @@ window.onload = () => {
 
   let i = 1
   for (const KEY in ITEM_HASH) {
-    if (KEY === '資産の部') {
-      eache(KEY,i)
+    if (KEY === ASSETS_KEY) {
+      graph_contents(KEY,i)
       i += KEY.length -1
-    } else if (KEY === '負債及び純資産の部') {
-      eache(KEY,i)
+    } else if (KEY === LIABILITIES＿NETASSETS＿KEY) {
+      graph_contents(KEY,i)
     }
   }
   result += `</table>`
@@ -93,12 +95,15 @@ const btn_click = () => {
   // '資産の部'の合計を追加
   value_list.splice(3,0,value_list[1] + value_list[2])
 
-  // '負債及び純資産の部'の合計を追加
-  let num = 0;
-  for(let l = 4; l < value_list.length; l++){
-    num += value_list[l]
+  //'負債及び純資産の部'の合計を追加
+  var total = value_list.reduce(function(sum,word){
+    return sum + word
+  })
+  let sum_assets = 0
+  for (let l = 0 ; l <= ITEM_HASH[ASSETS_KEY].length ; l++){
+    sum_assets += value_list[l]
   }
-  value_list.push(num)
+  value_list.push(total - sum_assets )
 
   let blank_flag = true
   // forEachではbreakできないためこの実装にしている。
@@ -180,8 +185,8 @@ const replace_char_code = element => {
   })
 }
 
-//初期画面HTMLの類似処理をまとめた関数
-const eache = (KEY,i) => {
+//表と要素の作成
+const graph_contents = (KEY,i) => {
   ITEM_HASH[KEY].forEach((element, index) => {
     if (index === 0) {
       result += `<tr>`
@@ -189,12 +194,12 @@ const eache = (KEY,i) => {
     }
     result += `<td>${element}</td>`
     result += `<td id="${ITEM_LIST[i]}"width="100">`
-    if(KEY === '資産の部'){
+    if (KEY === ASSETS_KEY){
       if (i !== KEY.length -1){
         result += `<input type="text" name="${ITEM_LIST[i]}">`
       }
-    }else if(KEY === '負債及び純資産の部'){
-      if(i !== ITEM_HASH['資産の部'].length + ITEM_HASH['負債及び純資産の部'].length){
+    }else if (KEY === LIABILITIES＿NETASSETS＿KEY){
+      if (i !== ITEM_HASH[ASSETS_KEY].length + ITEM_HASH[LIABILITIES＿NETASSETS＿KEY].length){
         result += `<input type="text" name="${ITEM_LIST[i]}">`
       }
     }
