@@ -57,10 +57,10 @@ window.onload = () => {
   let i = 1
   for (const KEY in ITEM_HASH) {
     if (KEY === ASSETS_KEY) {
-      graph_contents(KEY,i)
+      add_html(KEY,i)
       i += KEY.length -1
     } else if (KEY === LIABILITIES＿NETASSETS＿KEY) {
-      graph_contents(KEY,i)
+      add_html(KEY,i)
     }
   }
   result += `</table>`
@@ -96,14 +96,10 @@ const btn_click = () => {
   value_list.splice(3,0,value_list[1] + value_list[2])
 
   //'負債及び純資産の部'の合計を追加
-  var total = value_list.reduce(function(sum,word){
-    return sum + word
-  })
-  let sum_assets = 0
-  for (let l = 0 ; l <= ITEM_HASH[ASSETS_KEY].length ; l++){
-    sum_assets += value_list[l]
-  }
-  value_list.push(total - sum_assets )
+  value_list.push(value_list.reduce((sum,element,index) => {
+    if (index > 3) sum += element
+    return sum
+  },0))
 
   let blank_flag = true
   //forEachではbreakできないためこの実装にしている。
@@ -185,8 +181,8 @@ const replace_char_code = element => {
   })
 }
 
-//表と要素の作成
-const graph_contents = (KEY,i) => {
+//htmlを追加する
+const add_html = (KEY,i) => {
   ITEM_HASH[KEY].forEach((element, index) => {
     if (index === 0) {
       result += `<tr>`
