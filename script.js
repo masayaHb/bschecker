@@ -92,7 +92,7 @@ const btn_click = () => {
     return parseInt(element)
   })
 
-  // '資産の部'の合計を追加
+  //'資産の部'の合計を追加
   value_list.splice(3,0,value_list[1] + value_list[2])
 
   //'負債及び純資産の部'の合計を追加
@@ -106,7 +106,7 @@ const btn_click = () => {
   value_list.push(total - sum_assets )
 
   let blank_flag = true
-  // forEachではbreakできないためこの実装にしている。
+  //forEachではbreakできないためこの実装にしている。
   for (let index = 0; index < value_list.length; index++) {
     if (isNaN(value_list[index])) {
       blank_flag = false
@@ -178,7 +178,7 @@ const btn_click = () => {
   }
 }
 
-// 全角文字があれば半角に変換する
+//全角文字があれば半角に変換する
 const replace_char_code = element => {
   return element.replace(/[０-９]/g, s => {
     return String.fromCharCode(s.charCodeAt(0)-0xFEE0)
