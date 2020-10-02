@@ -137,12 +137,11 @@ const btn_click = () => {
       , `現金・預金:${CASH_AND_DEPOSIT}`
       , `売掛金:${ACCOUNTS_RECEIVABLE}`
       , `棚卸資産:${INVENTORY}`
-      , LINE
-      , '「過去の平均利益」'
     ]
 
+    result_list.push(LINE,'「過去の平均利益」')
     if (KEYAVG_ANNUAL_PROFIT_IN_THE_PAST < value_list.length - 2) {
-      result_list.push('-> 当期は不調気味？')
+      result_list.push('-> <font class="color">当期は不調気味？</font>')
     } else if ((value_list.length - 2 / value_list.length - 1) * 100 < 1){
       result_list.push('-> 「粉飾決算の可能性」もアタマに入れておくとよいでしょう。')
     } else {
@@ -150,26 +149,26 @@ const btn_click = () => {
     }
 
     /* 流動比率は200%以上が望ましく、100%未満はマズイ */
-    result_list.push(LINE)
+    result_list.push(LINE,'「流動比率」')
     if (CURRENT_RATIO >= 200) {
       result_list.push('-> Good')
     } else if (CURRENT_RATIO < 100) {
-      result_list.push('-> Bad')
+      result_list.push('-> <font class="color">Bad</font>')
     } else {
       result_list.push('-> おおむね問題なし')
     }
 
-    result_list.push(LINE)
+    result_list.push(LINE,'「ヤバイ会社かどうか」')
     if ((CASH_AND_DEPOSIT + ACCOUNTS_RECEIVABLE + INVENTORY) < value_list[2]) {
-      result_list.push('-> 流動資産のなかに架空資産や不良資産が混じっている可能性あり')
+      result_list.push('-> <font class="color">流動資産のなかに架空資産や不良資産が混じっている可能性あり</font>')
     } else {
       result_list.push('-> おおむね問題なし')
     }
 
-    let html = `<div></div>`
+    let html = `<div>`
     html += `<ul type="disc">`
-    result_list.forEach(element => html += `<li>${element}</li>`)
-    html += `</ul>`
+    result_list.forEach(element => html += `<p>${element}</p>`)
+    html += `</ul></div>`
     document.getElementById('add').innerHTML = html
   }
 }
